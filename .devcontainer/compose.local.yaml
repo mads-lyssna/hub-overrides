@@ -1,0 +1,18 @@
+# Personal devcontainer compose overrides (gitignored).
+# See .devcontainer/compose.yaml for the base service config to extend.
+services:
+  rails-app:
+    volumes:
+      - ${HOME}/dotfiles:/home/vscode/dotfiles:cached
+      - ${HOME}/.pi/agent/auth.json:/tmp/host-pi-auth.json:ro
+      - pi-agent:/home/vscode/.pi/agent
+      - nix:/nix
+      - pnpm-global:/home/vscode/.local/share/pnpm
+
+volumes:
+  pi-agent:
+    external: true
+  nix:
+    external: true
+  pnpm-global:
+    external: true
