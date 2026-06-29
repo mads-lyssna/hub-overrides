@@ -19,6 +19,16 @@ if [[ -r /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+
+# Persist the nix-daemon hook into the shells' system-wide rc files. The
+# Determinate installer runs with --init none and writes its /etc hooks to the
+# ephemeral container rootfs, so they vanish on every rebuild while /nix
+# persists in a volume — leaving ~/.nix-profile/bin off the interactive PATH.
+nix_hook='if [ -r /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh; fi'
+for rc in /etc/zsh/zshenv /etc/bash.bashrc; do
+  grep -qF 'profile.d/nix-daemon.sh' "$rc" 2>/dev/null \
+    || printf '%s\n' "$nix_hook" | sudo tee -a "$rc" >/dev/null
+done
 export NIX_REMOTE="${NIX_REMOTE:-daemon}"
 
 if ! command -v nix >/dev/null 2>&1; then

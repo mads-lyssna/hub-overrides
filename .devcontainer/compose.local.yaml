@@ -1,5 +1,3 @@
-# Personal devcontainer compose overrides (gitignored).
-# See .devcontainer/compose.yaml for the base service config to extend.
 services:
   rails-app:
     volumes:
