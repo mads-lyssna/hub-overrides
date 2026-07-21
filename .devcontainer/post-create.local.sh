@@ -6,6 +6,7 @@ DOTFILES="$HOME/dotfiles"
 # Named volumes mount as root:root; these must be writable before the
 # home-manager activation below writes Pi config and installs global CLIs.
 sudo chown vscode:vscode "$HOME/.local/share/pnpm"
+sudo chown vscode:vscode "$HOME/.config/linear"
 sudo chown -R vscode:vscode "$HOME/.pi"
 
 if ! command -v nix >/dev/null 2>&1; then

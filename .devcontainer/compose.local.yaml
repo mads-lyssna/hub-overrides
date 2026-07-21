@@ -6,6 +6,7 @@ services:
       - pi-agent:/home/vscode/.pi/agent
       - nix:/nix
       - pnpm-global:/home/vscode/.local/share/pnpm
+      - linear-config:/home/vscode/.config/linear
 
 volumes:
   pi-agent:
@@ -14,3 +15,4 @@ volumes:
     external: true
   pnpm-global:
     external: true
+  linear-config:
