@@ -1,12 +1,16 @@
 services:
   rails-app:
+    environment:
+      NIX_CONFIG: "experimental-features = nix-command flakes"
+      NIX_REMOTE: local
+      PATH: /home/lyssna/.nix-profile/bin:/nix/var/nix/profiles/devcontainer/bin:/home/lyssna/.local/share/pnpm/bin:/home/lyssna/.local/share/mise/shims:/home/lyssna/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     volumes:
-      - ${HOME}/dotfiles:/home/vscode/dotfiles:cached
+      - ${HOME}/dotfiles:/home/lyssna/dotfiles:cached
       - ${HOME}/.pi/agent/auth.json:/tmp/host-pi-auth.json:ro
-      - pi-agent:/home/vscode/.pi/agent
+      - pi-agent:/home/lyssna/.pi/agent
       - nix:/nix
-      - pnpm-global:/home/vscode/.local/share/pnpm
-      - linear-config:/home/vscode/.config/linear
+      - pnpm-global:/home/lyssna/.local/share/pnpm
+      - linear-config:/home/lyssna/.config/linear
 
 volumes:
   pi-agent:
@@ -16,3 +20,4 @@ volumes:
   pnpm-global:
     external: true
   linear-config:
+    external: true
