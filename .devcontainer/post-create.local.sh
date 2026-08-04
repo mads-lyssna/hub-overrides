@@ -23,7 +23,7 @@ if [[ ! -x "$NIX_BIN" ]]; then
 fi
 
 export NIX_REMOTE=local
-export PATH="$HOME/.nix-profile/bin:$NIX_PROFILE/bin:$HOME/.local/share/pnpm/bin:$PATH"
+export PATH="$HOME/.nix-profile/bin:$NIX_PROFILE/bin:$HOME/.local/share/pnpm:$PATH"
 
 if ! "$NIX_BIN" store ping --store local >/dev/null 2>&1; then
   echo "ERROR: local Nix store is unavailable" >&2
@@ -42,6 +42,12 @@ if [[ -f /tmp/host-pi-auth.json ]]; then
   mkdir -p "$HOME/.pi/agent"
   cp /tmp/host-pi-auth.json "$HOME/.pi/agent/auth.json"
   chmod 600 "$HOME/.pi/agent/auth.json"
+fi
+
+if [[ -f /tmp/host-pipkin-auth.json ]]; then
+  mkdir -p "$HOME/.pi/agent/pipkin"
+  cp /tmp/host-pipkin-auth.json "$HOME/.pi/agent/pipkin/auth.json"
+  chmod 600 "$HOME/.pi/agent/pipkin/auth.json"
 fi
 
 git config --file "$HOME/.gitconfig" gc.auto 0
