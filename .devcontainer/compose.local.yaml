@@ -3,6 +3,8 @@ services:
     environment:
       NIX_CONFIG: "experimental-features = nix-command flakes"
       NIX_REMOTE: local
+      XDG_RUNTIME_DIR: /run/user/1000
+      DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1000/bus
       # Pi normally groups sessions by its cwd; every worktree is /app in a devcontainer.
       # Keep shared Pi config/authentication but isolate persisted session history per worktree.
       PI_CODING_AGENT_SESSION_DIR: /home/lyssna/.pi/agent/sessions/${SLUG}
@@ -15,6 +17,8 @@ services:
       - nix:/nix
       - pnpm-global:/home/lyssna/.local/share/pnpm
       - linear-config:/home/lyssna/.config/linear
+      # All consumers share one daemon because concurrent GNOME Keyring writers are unsafe.
+      - lyssna-keyring-runtime:/run/user/1000:ro
 
 volumes:
   pi-agent:
@@ -24,4 +28,8 @@ volumes:
   pnpm-global:
     external: true
   linear-config:
+    external: true
+  lyssna-keyring-data:
+    external: true
+  lyssna-keyring-runtime:
     external: true
