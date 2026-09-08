@@ -3,8 +3,7 @@ set -euo pipefail
 
 docker volume inspect pi-agent >/dev/null 2>&1 || docker volume create pi-agent >/dev/null
 docker volume inspect nix >/dev/null 2>&1 || docker volume create nix >/dev/null
-docker volume inspect pnpm-global >/dev/null 2>&1 || docker volume create pnpm-global >/dev/null
-docker volume inspect linear-config >/dev/null 2>&1 || docker volume create linear-config >/dev/null
+docker volume inspect mise-data >/dev/null 2>&1 || docker volume create mise-data >/dev/null
 
 data_volume="lyssna-keyring-data"
 runtime_volume="lyssna-keyring-runtime"

@@ -6,7 +6,7 @@ NIX_PROFILE="/nix/var/nix/profiles/devcontainer"
 NIX_BIN="$NIX_PROFILE/bin/nix"
 
 owner="$(id -u):$(id -g)"
-sudo chown "$owner" /nix "$HOME/.local/share/pnpm" "$HOME/.config/linear"
+sudo chown "$owner" /nix
 sudo chown -R "$owner" "$HOME/.pi"
 
 exec 9>/nix/.lyssna-personal-setup.lock
@@ -23,7 +23,7 @@ if [[ ! -x "$NIX_BIN" ]]; then
 fi
 
 export NIX_REMOTE=local
-export PATH="$HOME/.nix-profile/bin:$NIX_PROFILE/bin:$HOME/.local/share/pnpm:$PATH"
+export PATH="$HOME/.nix-profile/bin:$NIX_PROFILE/bin:$PATH"
 
 if ! "$NIX_BIN" store ping --store local >/dev/null 2>&1; then
   echo "ERROR: local Nix store is unavailable" >&2

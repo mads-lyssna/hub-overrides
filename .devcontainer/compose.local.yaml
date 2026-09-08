@@ -8,15 +8,14 @@ services:
       # Pi normally groups sessions by its cwd; every worktree is /app in a devcontainer.
       # Keep shared Pi config/authentication but isolate persisted session history per worktree.
       PI_CODING_AGENT_SESSION_DIR: /home/lyssna/.pi/agent/sessions/${SLUG}
-      PATH: /home/lyssna/.nix-profile/bin:/nix/var/nix/profiles/devcontainer/bin:/home/lyssna/.local/share/pnpm:/home/lyssna/.local/share/mise/shims:/home/lyssna/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      PATH: /home/lyssna/.nix-profile/bin:/nix/var/nix/profiles/devcontainer/bin:/home/lyssna/.local/share/mise/shims:/home/lyssna/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     volumes:
       - ${HOME}/dotfiles:/home/lyssna/dotfiles:cached
       - ${HOME}/.pi/agent/auth.json:/tmp/host-pi-auth.json:ro
       - ${HOME}/.pi/agent/pipkin/auth.json:/tmp/host-pipkin-auth.json:ro
       - pi-agent:/home/lyssna/.pi/agent
       - nix:/nix
-      - pnpm-global:/home/lyssna/.local/share/pnpm
-      - linear-config:/home/lyssna/.config/linear
+      - mise-data:/home/lyssna/.local/share/mise
       # All consumers share one daemon because concurrent GNOME Keyring writers are unsafe.
       - lyssna-keyring-runtime:/run/user/1000:ro
 
@@ -25,9 +24,7 @@ volumes:
     external: true
   nix:
     external: true
-  pnpm-global:
-    external: true
-  linear-config:
+  mise-data:
     external: true
   lyssna-keyring-data:
     external: true
