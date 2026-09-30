@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+service_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "$service_dir/.." && pwd)"
+# initialize.sh regenerates .env before this hook runs.
+printf '\nHOST_WORKTREE_PATH=%s\n' "$repo_root" >>"$service_dir/.env"
+mkdir -p "$HOME/.pi/agent/sessions"
+
 docker volume inspect pi-agent >/dev/null 2>&1 || docker volume create pi-agent >/dev/null
 docker volume inspect nix >/dev/null 2>&1 || docker volume create nix >/dev/null
 docker volume inspect mise-data >/dev/null 2>&1 || docker volume create mise-data >/dev/null
@@ -9,7 +15,6 @@ data_volume="lyssna-keyring-data"
 runtime_volume="lyssna-keyring-runtime"
 container_name="lyssna-keyring"
 image_name="lyssna-keyring:local"
-service_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 for volume in "$data_volume" "$runtime_volume"; do
   docker volume inspect "$volume" >/dev/null 2>&1 || docker volume create "$volume" >/dev/null

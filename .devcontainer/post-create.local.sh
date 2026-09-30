@@ -7,7 +7,8 @@ NIX_BIN="$NIX_PROFILE/bin/nix"
 
 owner="$(id -u):$(id -g)"
 sudo chown "$owner" /nix
-sudo chown -R "$owner" "$HOME/.pi"
+# Credentials and session history are host-mounted; only adjust container-owned roots.
+sudo chown "$owner" "$HOME/.pi" "$HOME/.pi/agent"
 
 exec 9>/nix/.lyssna-personal-setup.lock
 flock 9
@@ -37,18 +38,6 @@ out=$("$NIX_BIN" build --no-link --print-out-paths "$DOTFILES#homeConfigurations
 HOME_MANAGER_BACKUP_EXT=hm-bak "$out/activate"
 
 flock -u 9
-
-if [[ -f /tmp/host-pi-auth.json ]]; then
-  mkdir -p "$HOME/.pi/agent"
-  cp /tmp/host-pi-auth.json "$HOME/.pi/agent/auth.json"
-  chmod 600 "$HOME/.pi/agent/auth.json"
-fi
-
-if [[ -f /tmp/host-pipkin-auth.json ]]; then
-  mkdir -p "$HOME/.pi/agent/pipkin"
-  cp /tmp/host-pipkin-auth.json "$HOME/.pi/agent/pipkin/auth.json"
-  chmod 600 "$HOME/.pi/agent/pipkin/auth.json"
-fi
 
 git config --file "$HOME/.gitconfig" gc.auto 0
 git config --file "$HOME/.gitconfig" maintenance.auto false
